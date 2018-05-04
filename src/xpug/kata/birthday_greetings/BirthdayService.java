@@ -16,12 +16,16 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class BirthdayService {
+	int numberOfGreetingsSent;
 
 	public void sendGreetings(String fileName, OurDate ourDate,
 			String smtpHost, int smtpPort) throws IOException, ParseException, AddressException, MessagingException {
+		System.out.println("Abriendo archivo");
 		BufferedReader in = new BufferedReader(new FileReader(fileName));
 		String str = "";
+		numberOfGreetingsSent = 0;
 		str = in.readLine(); // skip header
+		System.out.println("Primera linea de archivo");
 		while ((str = in.readLine()) != null) {
 			String[] employeeData = str.split(", ");
 			Employee employee = new Employee(employeeData[1], employeeData[0],
@@ -33,8 +37,10 @@ public class BirthdayService {
 				String subject = "Happy Birthday!";
 				sendMessage(smtpHost, smtpPort, "sender@here.com", subject,
 						body, receiver);
+				numberOfGreetingsSent++;
 			}
 		}
+		
 	}
 
 	private void sendMessage(String smtpHost, int smtpPort, String sender,
@@ -68,5 +74,9 @@ public class BirthdayService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public int quantityOfGreetingsSent() {
+		return numberOfGreetingsSent;
 	}
 }
