@@ -17,12 +17,11 @@ public class Main {
 		post("/sendGreetings", (request, response) -> {
 			SimpleSmtpServer server;
 			server = SimpleSmtpServer.start(1081);
-			String from = request.queryParams("from");
-			String subject = request.queryParams("subject");
-			String body = request.queryParams("body");
+			EmployeeRepository repository = new FileEmployeeRepository("employee_data.txt");
 			BirthdayService service = new BirthdayService();
 			EmailService mail = new SMTPMailService("localhost", 1081);
 			service.sendGreetings("employee_data.txt", new OurDate("2008/10/08"), mail);
+			service.sendGreetings(new OurDate("2008/10/08"));
 			server.stop();
 			return "<h2>Emails sent: "+service.quantityOfGreetingsSent()+"</h2>";
 		});
